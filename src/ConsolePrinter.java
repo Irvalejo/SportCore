@@ -69,5 +69,20 @@ public class ConsolePrinter {
         System.out.println("╚════════╩════════════════════╩════════════════════════════╩═══════════════╩════════════════════════════════════════╝");
     }
 
+        public static void imprimirJugador(Jugador jugador) {
+            System.out.println("────────────────────────────────────────");
+            System.out.println("ID:              " + jugador.getId());
+            System.out.println("Nombre:          " + jugador.getNombre());
+            System.out.println("Apellido:        " + jugador.getApellido());
+            System.out.println("Fecha Nac.:      " + jugador.getFechaNacimiento());
+            System.out.println("Correo:          " + jugador.getCorreo());
+            System.out.println("Foto:            " + jugador.getFoto());
+            System.out.println("ID del Equipo:   " + jugador.getEquipoID());
+            System.out.println("────────────────────────────────────────");
+        }
 
-}
+
+    }
+
+
+

@@ -73,5 +73,96 @@ public class JugadorDAO {
 
         return jugadores;
     }
+
+    public Jugador obtenerJugadorPorID(int id) {
+        String sql = "SELECT * FROM jugador WHERE ID = ?";
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Jugador(
+                        rs.getInt("ID"),
+                        rs.getString("Nombre"),
+                        rs.getString("Apellido"),
+                        rs.getString("FechaNacimiento"),
+                        rs.getString("Correo"),
+                        rs.getString("Foto"),
+                        rs.getInt("EquipoID")
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener jugador: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public List<Jugador> buscarJugadoresPorNombre(String termino) {
+        List<Jugador> jugadores = new ArrayList<>();
+        String sql = "SELECT * FROM jugador WHERE Nombre LIKE ? OR Apellido LIKE ?";
+
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, "%" + termino + "%");
+            stmt.setString(2, "%" + termino + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                jugadores.add(new Jugador(
+                        rs.getInt("ID"),
+                        rs.getString("Nombre"),
+                        rs.getString("Apellido"),
+                        rs.getString("FechaNacimiento"),
+                        rs.getString("Correo"),
+                        rs.getString("Foto"),
+                        rs.getInt("EquipoID")));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al buscar jugadores: " + e.getMessage());
+        }
+
+        return jugadores;
+    }
+
+
+    public void actualizarJugador(Jugador jugador) {
+        String sql = "UPDATE jugador SET Nombre = ?, Apellido = ?, FechaNacimiento = ?, Correo = ?, Foto = ?, EquipoID = ? WHERE ID = ?";
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, jugador.getNombre());
+            stmt.setString(2, jugador.getApellido());
+            stmt.setString(3, jugador.getFechaNacimiento());
+            stmt.setString(4, jugador.getCorreo());
+            stmt.setString(5, jugador.getFoto());
+            stmt.setInt(6, jugador.getEquipoID());
+            stmt.setInt(7, jugador.getId());
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar jugador: " + e.getMessage());
+        }
+    }
+
+    public boolean eliminarJugador(int id) {
+        String sql = "DELETE FROM jugador WHERE id = ?";
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            int filasAfectadas = stmt.executeUpdate();
+            return filasAfectadas > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar jugador: " + e.getMessage());
+            return false;
+        }
+    }
+
+
+
 }
 

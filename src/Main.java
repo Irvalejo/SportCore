@@ -20,6 +20,11 @@ public class Main {
                     System.out.println("6. Ver ligas");
                     System.out.println("7. Ver categorías por liga");
                     System.out.println("8. Ver equipos por categoría");
+                    System.out.println("9. Editar jugador");
+                    System.out.println("10. Buscar jugador por nombre o apellido");
+                    System.out.println("11. Eliminar jugador");
+
+
 
                     System.out.println("0. Salir");
                     int opcion = sc.nextInt();
@@ -134,6 +139,79 @@ public class Main {
                             List<Equipo> equiposPorCat = eqDAO.listarEquiposPorCategoria(idCat);
                             ConsolePrinter.imprimirEquipos(equiposPorCat);
                             break;
+
+                        case 9:
+                            System.out.print("ID del jugador a editar: ");
+                            int idJugador = sc.nextInt();
+                            sc.nextLine();
+
+                            Jugador jugadorExistente = jugadorDAO.obtenerJugadorPorID(idJugador);
+                            if (jugadorExistente == null) {
+                                System.out.println("Jugador no encontrado.");
+                                break;
+                            }
+
+                            System.out.println("Nombre actual: " + jugadorExistente.getNombre());
+                            System.out.print("Nuevo nombre (dejar vacío para mantener): ");
+                            String nuevoNombre = sc.nextLine();
+                            if (!nuevoNombre.isEmpty()) jugadorExistente.setNombre(nuevoNombre);
+
+                            System.out.println("Apellido actual: " + jugadorExistente.getApellido());
+                            System.out.print("Nuevo apellido (dejar vacío para mantener): ");
+                            String nuevoApellido = sc.nextLine();
+                            if (!nuevoApellido.isEmpty()) jugadorExistente.setApellido(nuevoApellido);
+
+                            System.out.println("Correo actual: " + jugadorExistente.getCorreo());
+                            System.out.print("Nuevo correo (dejar vacío para mantener): ");
+                            String nuevoCorreo = sc.nextLine();
+                            if (!nuevoCorreo.isEmpty()) jugadorExistente.setCorreo(nuevoCorreo);
+
+                            System.out.println("Fecha de nacimiento actual: " + jugadorExistente.getFechaNacimiento());
+                            System.out.print("Nueva fecha de nacimiento (YYYY-MM-DD, vacío para mantener): ");
+                            String nuevaFecha = sc.nextLine();
+                            if (!nuevaFecha.isEmpty()) jugadorExistente.setFechaNacimiento(nuevaFecha);
+
+                            System.out.println("Foto actual: " + jugadorExistente.getFoto());
+                            System.out.print("Nueva ruta de foto (vacío para mantener): ");
+                            String nuevaFoto = sc.nextLine();
+                            if (!nuevaFoto.isEmpty()) jugadorExistente.setFoto(nuevaFoto);
+
+                            System.out.println("Equipo actual ID: " + jugadorExistente.getEquipoID());
+                            System.out.print("Nuevo ID de equipo (0 para mantener): ");
+                            int nuevoEquipoID = sc.nextInt();
+                            sc.nextLine();
+                            if (nuevoEquipoID != 0) jugadorExistente.setEquipoID(nuevoEquipoID);
+
+                            jugadorDAO.actualizarJugador(jugadorExistente);
+                            System.out.println("Jugador actualizado.");
+                            break;
+
+                        case 10:
+                            System.out.print("Nombre o apellido a buscar: ");
+                            String termino = sc.nextLine();
+                            List<Jugador> resultados = jugadorDAO.buscarJugadoresPorNombre(termino);
+                            if (resultados.isEmpty()) {
+                                System.out.println("No se encontraron jugadores.");
+                            } else {
+                                for (Jugador jugador : resultados) {
+                                    ConsolePrinter.imprimirJugador(jugador);
+                                }
+                            }
+                            break;
+
+                        case 11:
+                            System.out.print("ID del jugador a eliminar: ");
+                            int idEliminar = sc.nextInt();
+                            sc.nextLine(); // limpiar buffer
+
+                            boolean eliminado = jugadorDAO.eliminarJugador(idEliminar);
+                            if (eliminado) {
+                                System.out.println("Jugador eliminado correctamente.");
+                            } else {
+                                System.out.println("No se pudo eliminar el jugador. Verifica el ID.");
+                            }
+                            break;
+
 
                         case 0:
                             System.exit(0);
