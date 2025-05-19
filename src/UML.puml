@@ -1,0 +1,66 @@
+@startuml
+
+class DBConnection {
+    - connection: Connection
+    + abrirConexion(): void
+    + getConnection(): Connection
+    + cerrarConexion(): void
+}
+
+class Liga {
+    - id: int
+    - nombre: String
+    + getters/setters
+}
+
+class Categoria {
+    - id: int
+    - nombre: String
+    - restriccionEdadMin: Integer
+    - restriccionEdadMax: Integer
+    - ligaID: int
+    + getters/setters
+}
+
+class CategoriaDAO {
+    + registrarCategoria(c: Categoria): void
+    + listarCategorias(): List<Categoria>
+    + listarCategoriasPorLiga(idLiga: int): List<Categoria>
+}
+
+class Equipo {
+    - id: int
+    - nombre: String
+    - categoriaID: int
+    + getters/setters
+}
+
+class EquipoDAO {
+    + registrarEquipo(e: Equipo): void
+    + listarEquiposPorCategoria(idCategoria: int): List<Equipo>
+}
+
+class Jugador {
+    - id: int
+    - nombre: String
+    - apellido: String
+    - fechaNacimiento: String
+    - correo: String
+    - foto: String
+    - equipoID: int
+    + getters/setters
+}
+
+class ConsolePrinter {
+    + imprimirLigas(ligas: List<Liga>): void
+    + imprimirCategorias(categorias: List<Categoria>): void
+    + imprimirEquipos(equipos: List<Equipo>): void
+    + imprimirJugadores(jugadores: List<Jugador>): void
+}
+
+' Relaciones
+Liga "1" --> "*" Categoria : contiene >
+Categoria "1" --> "*" Equipo : contiene >
+Equipo "1" --> "*" Jugador : contiene >
+
+@enduml
