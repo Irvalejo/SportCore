@@ -58,9 +58,13 @@ class ConsolePrinter {
     + imprimirJugadores(jugadores: List<Jugador>): void
 }
 
+class estadisticas {
+
+}
 ' Relaciones
 Liga "1" --> "*" Categoria : contiene >
 Categoria "1" --> "*" Equipo : contiene >
 Equipo "1" --> "*" Jugador : contiene >
+Jugador "1" --> "1" Equipo : pertenece >
 
 @enduml

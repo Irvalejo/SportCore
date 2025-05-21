@@ -81,6 +81,24 @@ public class ConsolePrinter {
             System.out.println("────────────────────────────────────────");
         }
 
+    public static void imprimirManager(List<Manager> manager) {
+        if (manager.isEmpty()) {
+            System.out.println("No hay managers registrado en este equipo.");
+            return;
+        }
+
+        System.out.println("╔════════╦════════════════════╦════════════════════════════╦═══════════════╦════════════════════════════════════════╗");
+        System.out.println("║   ID   ║ Nombre completo    ║ Correo                     ║ Fecha Nac.    ║ Telefono                               ║");
+        System.out.println("╠════════╬════════════════════╬════════════════════════════╬═══════════════╬════════════════════════════════════════╣");
+
+        for (Manager m : manager) {
+            String nombreCompleto = m.getNombreCompleto();
+            System.out.printf("║ %-6d ║ %-18s ║ %-26s ║ %-13s ║ %-38s ║\n",
+                    m.getId(), nombreCompleto, m.getCorreo(), m.getFechaNacimiento(), m.getTelefono());
+        }
+
+        System.out.println("╚════════╩════════════════════╩════════════════════════════╩═══════════════╩════════════════════════════════════════╝");
+    }
 
     }
 
