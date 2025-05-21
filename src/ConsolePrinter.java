@@ -5,8 +5,8 @@ public class ConsolePrinter {
 
     public static void imprimirLigas(List<Liga> ligas) {
         System.out.println("╔════════════════════════════╗");
-        System.out.println("║          LIGAS            ║");
-        System.out.println("╠════╦══════════════════════╣");
+        System.out.println("║          LIGAS             ║");
+        System.out.println("╠════╦═══════════════════════╣");
         System.out.printf("║ %-2s ║ %-20s ║%n", "ID", "Nombre");
         System.out.println("╠════╬══════════════════════╣");
 
@@ -37,7 +37,7 @@ public class ConsolePrinter {
 
     public static void imprimirEquipos(List<Equipo> equipos) {
         System.out.println("╔════════════════════════════╗");
-        System.out.println("║         EQUIPOS           ║");
+        System.out.println("║         EQUIPOS            ║");
         System.out.println("╠════╦══════════════════════╣");
         System.out.printf("║ %-2s ║ %-20s ║%n", "ID", "Nombre");
         System.out.println("╠════╬══════════════════════╣");

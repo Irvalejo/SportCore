@@ -71,10 +71,11 @@ public class ManagerDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, manager.getNombreCompleto());
-            stmt.setString(3, manager.getFechaNacimiento());
-            stmt.setString(4, manager.getCorreo());
-            stmt.setString(5, manager.getTelefono());
-            stmt.setInt(6, manager.getEquipoID());
+            stmt.setString(2, manager.getFechaNacimiento());
+            stmt.setString(3, manager.getCorreo());
+            stmt.setString(4, manager.getTelefono());
+            stmt.setInt(5, manager.getEquipoID());
+            stmt.setInt(6, manager.getId());
             stmt.executeUpdate();
 
         } catch (SQLException e) {
