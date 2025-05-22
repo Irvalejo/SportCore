@@ -10,24 +10,27 @@ public class Main {
 
                 ManagerDAO managerDAO = new ManagerDAO();
                 JugadorDAO jugadorDAO = new JugadorDAO();
+                EquipoDAO  equipoDAO   = new EquipoDAO();
                 Scanner sc = new Scanner(System.in);
 
                 while (true) {
-                    System.out.println("1. Registrar jugador");
-                    System.out.println("2. Ver jugadores por equipo");
-                    System.out.println("3. Registrar equipo");
-                    System.out.println("4. Registrar categoría");
-                    System.out.println("5. Registrar liga");
-                    System.out.println("6. Ver ligas");
-                    System.out.println("7. Ver categorías por liga");
-                    System.out.println("8. Ver equipos por categoría");
-                    System.out.println("9. Editar jugador");
+                    System.out.println("1.  Registrar jugador");
+                    System.out.println("2.  Ver jugadores por equipo");
+                    System.out.println("3.  Registrar equipo");
+                    System.out.println("4.  Registrar categoría");
+                    System.out.println("5.  Registrar liga");
+                    System.out.println("6.  Ver ligas");
+                    System.out.println("7.  Ver categorías por liga");
+                    System.out.println("8.  Ver equipos por categoría");
+                    System.out.println("9.  Editar jugador");
                     System.out.println("10. Buscar jugador por nombre o apellido");
                     System.out.println("11. Eliminar jugador");
                     System.out.println("12. Registrar manager");
                     System.out.println("13. Ver Manager");
-                    System.out.println("14.Editar manager");
-                    System.out.println();
+                    System.out.println("14. Editar manager");
+                    System.out.println("15. Editar Equipo");
+                    System.out.println("16. Eliminar equipo");
+
 
 
                     System.out.println("0. Salir");
@@ -74,7 +77,6 @@ public class Main {
                             equipo.setNombre(nombreEquipo);
                             equipo.setCategoriaID(categoriaID);
 
-                            EquipoDAO equipoDAO = new EquipoDAO();
                             equipoDAO.registrarEquipo(equipo);
                             break;
 
@@ -281,9 +283,45 @@ public class Main {
                             System.out.println("Manager actualizado.");
                             break;
 
+                        case 15:
+                            System.out.println("ID del equipo a editar: ");
+                            int idequipo  = sc.nextInt();
+                            sc.nextLine();
+                            Equipo equipoExistente = equipoDAO.obtenerEquipoPorID(idequipo);
+                            if ( equipoExistente == null) {
+                                System.out.println("Equipo no encontrado.");
+                                break;
+                            }
+                            System.out.println("Nombre actual: " + equipoExistente.getNombre());
+                            System.out.print("Nuevo nombre (dejar vacío para mantener): ");
+                            String nuevoNombreE = sc.nextLine();
+                            if (!nuevoNombreE.isEmpty()) equipoExistente.setNombre(nuevoNombreE);
+
+                            equipoDAO.actualizarEquipo(equipoExistente);
+                            System.out.println("Equipo actualizado.");
+                            break;
+
+                        case 16:
+                            System.out.printf("Id del equipo a eliminar: ");
+                            int idEliminarE = sc.nextInt();
+                            sc.nextLine(); // limpiar buffer
+
+                            boolean eliminadoE = equipoDAO.eliminarEquipo(idEliminarE);
+                            if (eliminadoE) {
+                                System.out.println("Equipo eliminado correctamente.");
+                            } else {
+                                System.out.println("No se pudo eliminar el equipo. Verifica el ID.");
+                            }
+                            break;
 
                         case 0:
+                            System.out.println("Saliendo...");
+                            sc.close();
+                            System.out.println("Programa finalizado.");
+                            System.out.printf("Gracias por usar el programa.%n");
                             System.exit(0);
+                        default:
+                            throw new IllegalStateException("Unexpected value: " + opcion);
                     }
                 }
             }
