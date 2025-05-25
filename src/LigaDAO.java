@@ -42,4 +42,57 @@ public class LigaDAO {
         return ligas;
     }
 
+    public Liga obtenerLigaPorID(int id) {
+
+        String sql = "SELECT * FROM liga WHERE ID = ?";
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Liga(
+                        rs.getInt("ID"),
+                        rs.getString("Nombre"),
+                        rs.getInt("Año")
+                );
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("Error al obtener liga: " + e.getMessage());
+        }
+        return null;
+
+    }
+
+    public void actualizarLiga(Liga liga) {
+        String sql = "UPDATE liga SET Nombre = ?, Año = ? WHERE ID = ?";
+
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, liga.getNombre());
+            stmt.setInt(2, liga.getAño());
+            stmt.setInt(3, liga.getId());
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar liga: " + e.getMessage());
+        }
+    }
+
+    public boolean eliminarLiga(int id) {
+        String sql = "DELETE FROM liga WHERE id = ?";
+
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            int filasAfectadas = stmt.executeUpdate();
+            return filasAfectadas > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar liga: " + e.getMessage());
+            return false;
+        }
+    }
 }

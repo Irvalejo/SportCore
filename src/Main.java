@@ -11,6 +11,7 @@ public class Main {
                 ManagerDAO managerDAO = new ManagerDAO();
                 JugadorDAO jugadorDAO = new JugadorDAO();
                 EquipoDAO  equipoDAO   = new EquipoDAO();
+                LigaDAO ligaDAO = new LigaDAO();
                 Scanner sc = new Scanner(System.in);
 
                 while (true) {
@@ -30,6 +31,8 @@ public class Main {
                     System.out.println("14. Editar manager");
                     System.out.println("15. Editar Equipo");
                     System.out.println("16. Eliminar equipo");
+                    System.out.println("17. Editrar Liga");
+                    System.out.println("18. Eliminar Liga");
 
 
 
@@ -117,7 +120,6 @@ public class Main {
                             liga.setNombre(nombreLiga);
                             liga.setAño(añoLiga);
 
-                            LigaDAO ligaDAO = new LigaDAO();
                             ligaDAO.registrarLiga(liga);
                             break;
 
@@ -247,7 +249,6 @@ public class Main {
                             int idmanager  = sc.nextInt();
                             sc.nextLine();
 
-
                             Manager managerExistente = managerDAO.obtenerManagerPorID(idmanager);
                             if ( managerExistente == null) {
                                 System.out.println("Manager no encontrado.");
@@ -313,6 +314,42 @@ public class Main {
                                 System.out.println("No se pudo eliminar el equipo. Verifica el ID.");
                             }
                             break;
+
+                        case 17:
+                            System.out.println("Editar Liga");
+                            System.out.print("ID de la liga a editar: ");
+                            int idLigaM = sc.nextInt();
+                            sc.nextLine();
+                            Liga ligaExistente = ligaDAO.obtenerLigaPorID(idLigaM);
+                            if (ligaExistente == null) {
+                                System.out.println("Liga no encontrada.");
+                                break;
+                            }
+
+                            System.out.println("Nombre actual: " + ligaExistente.getNombre());
+                            System.out.print("Nuevo nombre (dejar vacío para mantener): ");
+                            String nuevoNombreL = sc.nextLine();
+                            if (!nuevoNombreL.isEmpty()) ligaExistente.setNombre(nuevoNombreL);
+                            System.out.println("Año actual: " + ligaExistente.getAño());
+                            System.out.print("Nuevo anio (0 para mantener): ");
+                            int nuevoAnio = sc.nextInt();
+                            if (nuevoAnio != 0) ligaExistente.setAño(nuevoAnio);
+                            ligaDAO.actualizarLiga(ligaExistente);
+                            System.out.println("Liga actualizada.");
+                            break;
+
+                            case 18:
+                                System.out.print("ID de la liga a eliminar: ");
+                                int idEliminarL = sc.nextInt();
+                                sc.nextLine(); // limpiar buffer
+
+                                boolean eliminadoL = ligaDAO.eliminarLiga(idEliminarL);
+                                if (eliminadoL) {
+                                    System.out.println("liga eliminada correctamente.");
+                                } else {
+                                    System.out.println("No se pudo eliminar la liga. Verifica el ID.");
+                                }
+                                break;
 
                         case 0:
                             System.out.println("Saliendo...");

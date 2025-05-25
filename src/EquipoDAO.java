@@ -2,7 +2,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EquipoDAO {
+public class    EquipoDAO {
 
     public void registrarEquipo(Equipo equipo) {
         String sql = "INSERT INTO equipo (Nombre, CategoriaID) VALUES (?, ?)";
