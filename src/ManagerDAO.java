@@ -106,6 +106,22 @@ public class ManagerDAO {
         return null;
     }
 
+    public boolean eliminarManager(int id) {
+        String sql = "DELETE FROM manager WHERE id = ?";
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            stmt.setInt(1, id);
+            int filasAfectadas = stmt.executeUpdate();
+            return filasAfectadas > 0;
 
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar Manager: " + e.getMessage());
+            return false;
         }
+    }
+    }
+
+
+
+

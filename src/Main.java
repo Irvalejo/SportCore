@@ -12,6 +12,7 @@ public class Main {
                 JugadorDAO jugadorDAO = new JugadorDAO();
                 EquipoDAO  equipoDAO   = new EquipoDAO();
                 LigaDAO ligaDAO = new LigaDAO();
+                CategoriaDAO categoriaDAO = new CategoriaDAO();
                 Scanner sc = new Scanner(System.in);
 
                 while (true) {
@@ -33,6 +34,7 @@ public class Main {
                     System.out.println("16. Eliminar equipo");
                     System.out.println("17. Editrar Liga");
                     System.out.println("18. Eliminar Liga");
+                    System.out.println("19. Eliminar Manager");
 
 
 
@@ -103,7 +105,7 @@ public class Main {
                             categoria.setRestriccionEdadMax(edadMax);
                             categoria.setLigaID(ligaID);
 
-                            CategoriaDAO categoriaDAO = new CategoriaDAO();
+
                             categoriaDAO.registrarCategoria(categoria);
                             break;
 
@@ -244,6 +246,7 @@ public class Main {
                             List<Manager> managers = manager.listarManagerPorEquipo(equipoID);
                             ConsolePrinter.imprimirManager(managers);
                             break;
+
                         case 14:
                             System.out.print("ID del manager a editar: ");
                             int idmanager  = sc.nextInt();
@@ -348,6 +351,20 @@ public class Main {
                                     System.out.println("liga eliminada correctamente.");
                                 } else {
                                     System.out.println("No se pudo eliminar la liga. Verifica el ID.");
+                                }
+                                break;
+
+                            case 19:
+                                System.out.println("Eliminar Manager");
+                                System.out.print("ID del manager a eliminar: ");
+                                int idEliminarM = sc.nextInt();
+                                sc.nextLine(); // limpiar buffer
+
+                                boolean eliminadoM = managerDAO.eliminarManager(idEliminarM);
+                                if (eliminadoM) {
+                                    System.out.println("Jugador eliminado correctamente.");
+                                } else {
+                                    System.out.println("No se pudo eliminar al Manager. Verifica el ID.");
                                 }
                                 break;
 
