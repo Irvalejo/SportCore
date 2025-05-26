@@ -35,6 +35,8 @@ public class Main {
                     System.out.println("17. Editrar Liga");
                     System.out.println("18. Eliminar Liga");
                     System.out.println("19. Eliminar Manager");
+                    System.out.println("20. Editar Categoria");
+                    System.out.println("21. Eliminar Categoria");
 
 
 
@@ -365,6 +367,44 @@ public class Main {
                                     System.out.println("Jugador eliminado correctamente.");
                                 } else {
                                     System.out.println("No se pudo eliminar al Manager. Verifica el ID.");
+                                }
+                                break;
+
+                            case 20:
+                                System.out.print("ID de la categoria a editar: ");
+                                int idCategoria = sc.nextInt();
+                                sc.nextLine();
+                                Categoria categoriaExistente = categoriaDAO.obtenerCategoriaPorId(idCategoria);
+                                if (categoriaExistente == null) {
+                                    System.out.println("Categoria no encontrada.");
+                                    break;
+                                }
+                                System.out.println("Nombre actual: " + categoriaExistente.getNombre());
+                                System.out.print("Nuevo nombre (dejar vacío para mantener): ");
+                                String nuevoNombreC = sc.nextLine();
+                                if (!nuevoNombreC.isEmpty()) categoriaExistente.setNombre(nuevoNombreC);
+                                System.out.println("Restriccion Edad Minima actual: " + categoriaExistente.getRestriccionEdadMin());
+                                System.out.print("Nueva Restriccion Edad Minima (0 para mantener): ");
+                                int nuevaRestriccionEdadMin = sc.nextInt();
+                                if (nuevaRestriccionEdadMin != 0) categoriaExistente.setRestriccionEdadMin(nuevaRestriccionEdadMin);
+                                System.out.println("Restriccion Edad Maxima actual: " + categoriaExistente.getRestriccionEdadMax());
+                                System.out.print("Nueva Restriccion Edad Maxima (0 para mantener): ");
+                                int nuevaRestriccionEdadMax = sc.nextInt();
+                                if (nuevaRestriccionEdadMax != 0) categoriaExistente.setRestriccionEdadMax(nuevaRestriccionEdadMax);
+                                categoriaDAO.actualizarCategoria(categoriaExistente);
+                                System.out.println("Categoria actualizada.");
+                                break;
+
+                            case 21:
+                                System.out.print("ID de la categoria a eliminar: ");
+                                int idEliminarC = sc.nextInt();
+                                sc.nextLine(); // limpiar buffer
+
+                                boolean eliminadoC = categoriaDAO.eliminarCategoria(idEliminarC);
+                                if (eliminadoC) {
+                                    System.out.println("Categoria eliminada correctamente.");
+                                } else {
+                                    System.out.println("No se pudo eliminar la categoria. Verifica el ID.");
                                 }
                                 break;
 

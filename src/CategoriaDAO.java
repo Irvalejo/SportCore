@@ -93,6 +93,74 @@ public class CategoriaDAO {
         return categorias;
     }
 
+    public void actualizarCategoria(Categoria categoria) {
+        String sql = "UPDATE categoria SET Nombre = ?, RestriccionEdadMin = ?, RestriccionEdadMax = ? WHERE ID = ?";
 
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, categoria.getNombre());
+            stmt.setInt(2, categoria.getRestriccionEdadMin());
+            stmt.setInt(3, categoria.getRestriccionEdadMax());
+            stmt.setInt(4, categoria.getId());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar categoría: " + e.getMessage());
+        }
+    }
+
+
+    public boolean eliminarCategoria(int id) {              // Funcionaba pero no me dejaba eliminar por ID siempre( incluso si de vdd funcionaba ,
+                                                           // por eso es diferente a los demas metodos eliminar, hay que hacerlos igual que ete
+        String sql = "DELETE FROM categoria WHERE ID = ?";
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            int filasAfectadas = stmt.executeUpdate(); // Guarda el numero de filas afectadas
+
+
+            if (filasAfectadas > 0) {   // Verifica si se eliminó al menos una fila
+                return true; // Si sí, devuelve true
+            } else {
+                return false; // Si no, devuelve false (por ejemplo, si el ID no existe)
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar categoría: " + e.getMessage());
+            return false; // Si ocurre un error de SQL, la operación falló
+        }
+    }
+
+    public Categoria obtenerCategoriaPorId(int id) {
+        String sql = "SELECT * FROM categoria WHERE id = ?";
+
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Integer edadMin = rs.getObject("RestriccionEdadMin") != null ? rs.getInt("RestriccionEdadMin") : null;
+                    Integer edadMax = rs.getObject("RestriccionEdadMax") != null ? rs.getInt("RestriccionEdadMax") : null;
+
+                    return new Categoria(
+                            rs.getInt("ID"),
+                            rs.getString("Nombre"),
+                            edadMin,
+                            edadMax,
+                            rs.getInt("LigaID")
+                    );
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al obtener categoría: " + e.getMessage());
+        }
+
+        return null;
+    }
 
 }
