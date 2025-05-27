@@ -233,7 +233,7 @@ public class Main {
                             m.setFechaNacimiento(sc.nextLine());
                             System.out.print("Correo: ");
                             m.setCorreo(sc.nextLine());
-                            System.out.println("Telefono: ");
+                            System.out.print("Telefono: ");
                             m.setTelefono(sc.nextLine());
                             System.out.print("ID del equipo: ");
                             m.setEquipoID(sc.nextInt());
@@ -364,7 +364,7 @@ public class Main {
 
                                 boolean eliminadoM = managerDAO.eliminarManager(idEliminarM);
                                 if (eliminadoM) {
-                                    System.out.println("Jugador eliminado correctamente.");
+                                    System.out.println("Manager eliminado correctamente.");
                                 } else {
                                     System.out.println("No se pudo eliminar al Manager. Verifica el ID.");
                                 }

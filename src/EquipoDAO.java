@@ -68,12 +68,18 @@ public class    EquipoDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
-            int filasAfectadas = stmt.executeUpdate();
-            return filasAfectadas > 0;
+            int filasAfectadas = stmt.executeUpdate(); // Guarda el numero de filas afectadas
+
+
+            if (filasAfectadas > 0) {   // Verifica si se eliminó al menos una fila
+                return true; // Si sí, devuelve true
+            } else {
+                return false; // Si no, devuelve false (por ejemplo, si el ID no existe)
+            }
 
         } catch (SQLException e) {
-            System.out.println("Error al eliminar equipo: " + e.getMessage());
-            return false;
+            System.out.println("Error al eliminar categoría: " + e.getMessage());
+            return false; // Si ocurre un error de SQL, la operación falló
         }
     }
 
