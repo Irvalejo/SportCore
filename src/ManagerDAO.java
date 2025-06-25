@@ -1,6 +1,8 @@
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
+import java.sql.Date;
 
 public class ManagerDAO {
 
@@ -18,7 +20,7 @@ public class ManagerDAO {
     try (PreparedStatement stmt = conn.prepareStatement(sql)) {
         stmt.setInt(1, manager.getId());
         stmt.setString(2, manager.getNombreCompleto());
-        stmt.setString(3, manager.getFechaNacimiento());
+        stmt.setDate(3, Date.valueOf(manager.getFechaNacimiento()));
         stmt.setString(4, manager.getCorreo());
         stmt.setString(5, manager.getTelefono());
         stmt.setInt(6, manager.getEquipoID());
@@ -29,6 +31,7 @@ public class ManagerDAO {
         db.cerrarConexion();
     }
 }
+
     public List<Manager> listarManagerPorEquipo(int equipoID) {
         List<Manager> manager = new ArrayList<>();
         DBConnection db = new DBConnection();
@@ -49,8 +52,8 @@ public class ManagerDAO {
                 Manager m = new Manager(
                         rs.getInt("ID"),
                         rs.getString("NombreCompleto"),
-                        rs.getString("FechaNacimiento"),
                         rs.getString("Correo"),
+                        (rs.getDate("FechaNacimiento") !=null) ? rs.getDate("FechaNacimiento").toLocalDate() : null,
                         rs.getString("Telefono"),
                         rs.getInt("EquipoID")
                 );
@@ -65,13 +68,14 @@ public class ManagerDAO {
 
         return manager;
     }
+
     public void actualizarManager(Manager manager) {
         String sql = "UPDATE manager SET NombreCompleto = ?, FechaNacimiento = ?, Correo = ?, Telefono = ?, EquipoID = ? WHERE ID = ?";
         try (Connection conn = new DBConnection().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, manager.getNombreCompleto());
-            stmt.setString(2, manager.getFechaNacimiento());
+            stmt.setDate(2, Date.valueOf(manager.getFechaNacimiento()));
             stmt.setString(3, manager.getCorreo());
             stmt.setString(4, manager.getTelefono());
             stmt.setInt(5, manager.getEquipoID());
@@ -95,7 +99,7 @@ public class ManagerDAO {
                        rs.getInt("ID"),
                        rs.getString("NombreCompleto"),
                        rs.getString("Correo"),
-                       rs.getString("FechaNacimiento"),
+                       (rs.getDate("FechaNacimiento") !=null) ? rs.getDate("FechaNacimiento").toLocalDate() : null,
                        rs.getString("Telefono"),
                        rs.getInt("EquipoID")
                );

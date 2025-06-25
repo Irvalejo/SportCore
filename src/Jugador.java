@@ -1,8 +1,10 @@
+import java.time.LocalDate;
+
 public class Jugador {
     private int id;
     private String nombre;
     private String apellido;
-    private String fechaNacimiento;
+    private LocalDate fechaNacimiento;
     private String correo;
     private String foto;
     private int equipoID;
@@ -34,11 +36,11 @@ public class Jugador {
         this.apellido = apellido;
     }
 
-    public String getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(String fechaNacimiento) {
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
@@ -68,8 +70,7 @@ public class Jugador {
 
     public Jugador() {}
 
-
-    public Jugador(int id, String nombre, String apellido, String fechaNacimiento, String correo, String foto, int equipoID) {
+    public Jugador(int id, String nombre, String apellido, LocalDate fechaNacimiento, String correo, String foto, int equipoID) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;

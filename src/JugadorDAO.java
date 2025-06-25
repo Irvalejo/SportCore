@@ -1,6 +1,8 @@
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
+import java.sql.Date;
 
 public class JugadorDAO {
 
@@ -21,7 +23,7 @@ public class JugadorDAO {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, jugador.getNombre());
             stmt.setString(2, jugador.getApellido());
-            stmt.setString(3, jugador.getFechaNacimiento());
+            stmt.setDate(3, Date.valueOf(jugador.getFechaNacimiento()));
             stmt.setString(4, jugador.getCorreo());
             stmt.setString(5, jugador.getFoto());
             stmt.setInt(6, jugador.getEquipoID());
@@ -57,7 +59,7 @@ public class JugadorDAO {
                         rs.getInt("ID"),
                         rs.getString("Nombre"),
                         rs.getString("Apellido"),
-                        rs.getString("FechaNacimiento"),
+                        (rs.getDate("FechaNacimiento") !=null)? rs.getDate("FechaNacimiento").toLocalDate():null,
                         rs.getString("Correo"),
                         rs.getString("Foto"),
                         rs.getInt("EquipoID")
@@ -86,7 +88,7 @@ public class JugadorDAO {
                         rs.getInt("ID"),
                         rs.getString("Nombre"),
                         rs.getString("Apellido"),
-                        rs.getString("FechaNacimiento"),
+                        (rs.getDate("FechaNacimiento") !=null)? rs.getDate("FechaNacimiento").toLocalDate():null,
                         rs.getString("Correo"),
                         rs.getString("Foto"),
                         rs.getInt("EquipoID")
@@ -114,7 +116,7 @@ public class JugadorDAO {
                         rs.getInt("ID"),
                         rs.getString("Nombre"),
                         rs.getString("Apellido"),
-                        rs.getString("FechaNacimiento"),
+                        (rs.getDate("FechaNacimiento") !=null)? rs.getDate("FechaNacimiento").toLocalDate():null,
                         rs.getString("Correo"),
                         rs.getString("Foto"),
                         rs.getInt("EquipoID")));
@@ -133,9 +135,9 @@ public class JugadorDAO {
         try (Connection conn = new DBConnection().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, jugador.getNombre());
+            stmt.setString(1,jugador.getNombre());
             stmt.setString(2, jugador.getApellido());
-            stmt.setString(3, jugador.getFechaNacimiento());
+            stmt.setDate(3,Date.valueOf(jugador.getFechaNacimiento()) );
             stmt.setString(4, jugador.getCorreo());
             stmt.setString(5, jugador.getFoto());
             stmt.setInt(6, jugador.getEquipoID());

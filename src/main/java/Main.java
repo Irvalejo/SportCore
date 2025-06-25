@@ -1,5 +1,10 @@
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
+import java.time.LocalDate;
+
+
 public class Main {
     public static void main(String[] args) {
         //Conexion a la BD
@@ -37,9 +42,6 @@ public class Main {
                     System.out.println("19. Eliminar Manager");
                     System.out.println("20. Editar Categoria");
                     System.out.println("21. Eliminar Categoria");
-
-
-
                     System.out.println("0. Salir");
                     int opcion = sc.nextInt();
                     sc.nextLine(); // limpiar buffer
@@ -52,7 +54,14 @@ public class Main {
                             System.out.print("Apellido: ");
                             j.setApellido(sc.nextLine());
                             System.out.print("Fecha de Nacimiento (YYYY-MM-DD): ");
-                            j.setFechaNacimiento(sc.nextLine());
+                            String fechaNacimientoStr = sc.nextLine(); //leer la fecha como string
+                            LocalDate fechaNacimiento = null; // fecha inicia vacia
+                                try{
+                                    fechaNacimiento = LocalDate.parse(fechaNacimientoStr); // convierte a localdate
+                                    j.setFechaNacimiento(fechaNacimiento);
+                                } catch (DateTimeParseException e){
+                                    System.out.println("Formato de fecha incorrecto");
+                                }
                             System.out.print("Correo: ");
                             j.setCorreo(sc.nextLine());
                             System.out.print("Ruta de foto: ");
@@ -179,10 +188,20 @@ public class Main {
                             String nuevoCorreo = sc.nextLine();
                             if (!nuevoCorreo.isEmpty()) jugadorExistente.setCorreo(nuevoCorreo);
 
-                            System.out.println("Fecha de nacimiento actual: " + jugadorExistente.getFechaNacimiento());
-                            System.out.print("Nueva fecha de nacimiento (YYYY-MM-DD, vacío para mantener): ");
-                            String nuevaFecha = sc.nextLine();
-                            if (!nuevaFecha.isEmpty()) jugadorExistente.setFechaNacimiento(nuevaFecha);
+
+                            String fechaActualStr = (jugadorExistente.getFechaNacimiento() !=null) ?
+                                                     jugadorExistente.getFechaNacimiento().toString() : "No especificada";
+                            System.out.println("Fecha de nacimiento actual: " + fechaActualStr );
+                            System.out.println("Nueva fecha de nacimiento (YYYY-MM-DD, vacío para mantener): ");
+                            String nuevaFechaStr = sc.nextLine();
+                            if(!nuevaFechaStr.isEmpty()){
+                                try{
+                                LocalDate nuevaFechaLD = LocalDate.parse(nuevaFechaStr);  // convierte string a fecha
+                                jugadorExistente.setFechaNacimiento(nuevaFechaLD); // asigna la fecha al jugador
+                                } catch (DateTimeParseException e){
+                                    System.out.println("Formato de fecha incorrecto");
+                                }
+                            }
 
                             System.out.println("Foto actual: " + jugadorExistente.getFoto());
                             System.out.print("Nueva ruta de foto (vacío para mantener): ");
@@ -229,8 +248,17 @@ public class Main {
                             Manager m = new Manager();
                             System.out.print("Nombre Completo: ");
                             m.setNombreCompleto(sc.nextLine());
-                            System.out.print("Fecha de Nacimiento (YYYY-MM-DD): ");
-                            m.setFechaNacimiento(sc.nextLine());
+                           System.out.print("Fecha de Nacimiento (YYYY-MM-DD): ");
+                            String fechaNacimientoMStr = sc.nextLine(); //leer la fecha como string
+                            LocalDate fechaNacimientoM = null; // fecha inicia vacia
+                            try{
+                                fechaNacimientoM = LocalDate.parse(fechaNacimientoMStr); // convierte a localdate
+                                m.setFechaNacimiento(fechaNacimientoM);
+                            } catch (DateTimeParseException e){
+                                System.out.println("Formato de fecha incorrecto");
+                            }
+
+
                             System.out.print("Correo: ");
                             m.setCorreo(sc.nextLine());
                             System.out.print("Telefono: ");
@@ -266,8 +294,15 @@ public class Main {
 
                             System.out.println("Fecha de nacimiento actual: " + managerExistente.getFechaNacimiento());
                             System.out.print("Nueva fecha de nacimiento (YYYY-MM-DD, vacío para mantener): ");
-                            String nuevaFechaM = sc.nextLine();
-                            if (!nuevaFechaM.isEmpty()) managerExistente.setFechaNacimiento(nuevaFechaM);
+                            String nuevaFechaMStr = sc.nextLine();
+                            if(!nuevaFechaMStr.isEmpty()){
+                                try{
+                                    LocalDate nuevaFechaLD = LocalDate.parse(nuevaFechaMStr);  // convierte string a fecha
+                                    managerExistente.setFechaNacimiento(nuevaFechaLD); // asigna la fecha al manager
+                                } catch (DateTimeParseException e){
+                                    System.out.println("Formato de fecha incorrecto");
+                                }
+                            }
 
                             System.out.println("Correo actual: " + managerExistente.getCorreo());
                             System.out.print("Nuevo correo (dejar vacío para mantener): ");

@@ -1,8 +1,10 @@
+import java.time.LocalDate;
+
 public class Manager {
     private int id;
     private String nombreCompleto;
     private String correo;
-    private String FechaNacimiento;
+    private LocalDate FechaNacimiento;
     private String telefono;
     private int equipoID;
 
@@ -31,11 +33,11 @@ public class Manager {
         this.correo = correo;
     }
 
-    public String getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return FechaNacimiento;
     }
 
-    public void setFechaNacimiento(String FechaNacimiento) {
+    public void setFechaNacimiento(LocalDate FechaNacimiento) {
         this.FechaNacimiento = FechaNacimiento;
     }
 
@@ -55,7 +57,7 @@ public class Manager {
         this.telefono = telefono;
     }
 
-    public Manager(int id,String nombreCompleto, String correo, String FechaNacimiento, String telefono, int equipoID) {
+    public Manager(int id,String nombreCompleto, String correo, LocalDate FechaNacimiento, String telefono, int equipoID) {
         this.id = id;
         this.nombreCompleto = nombreCompleto;
         this.correo = correo;
