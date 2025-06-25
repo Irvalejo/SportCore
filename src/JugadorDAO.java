@@ -129,7 +129,7 @@ public class JugadorDAO {
         return jugadores;
     }
 
-//pita
+//pite
     public void actualizarJugador(Jugador jugador) {
         String sql = "UPDATE jugador SET Nombre = ?, Apellido = ?, FechaNacimiento = ?, Correo = ?, Foto = ?, EquipoID = ? WHERE ID = ?";
         try (Connection conn = new DBConnection().getConnection();
