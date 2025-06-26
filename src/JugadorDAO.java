@@ -4,6 +4,7 @@ import java.util.List;
 import java.time.LocalDate;
 import java.sql.Date;
 
+
 public class JugadorDAO {
 
     public void registrarJugador(Jugador jugador) {

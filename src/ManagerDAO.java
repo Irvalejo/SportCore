@@ -15,16 +15,22 @@ public class ManagerDAO {
             System.out.println("Conexión fallida. No se pudo registrar al manager.");
             return;
         }
-    String sql = "INSERT INTO manager (ID,NombreCompleto, FechaNacimiento,Correo,Telefono,EquipoID ) VALUES (?, ?, ?, ?, ?, ?)";
+    String sql = "INSERT INTO manager (NombreCompleto, FechaNacimiento,Correo,Telefono,EquipoID ) VALUES (?, ?, ?, ?, ?)";
 
-    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setInt(1, manager.getId());
-        stmt.setString(2, manager.getNombreCompleto());
-        stmt.setDate(3, Date.valueOf(manager.getFechaNacimiento()));
-        stmt.setString(4, manager.getCorreo());
-        stmt.setString(5, manager.getTelefono());
-        stmt.setInt(6, manager.getEquipoID());
+    try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+        stmt.setString(1, manager.getNombreCompleto());
+        stmt.setDate(2, Date.valueOf(manager.getFechaNacimiento()));
+        stmt.setString(3, manager.getCorreo());
+        stmt.setString(4, manager.getTelefono());
+        stmt.setInt(5, manager.getEquipoID());
         stmt.executeUpdate();
+
+        ResultSet rs = stmt.getGeneratedKeys();
+        if (rs.next()) {
+            manager.setId(rs.getInt(1));
+        }
+
     } catch (SQLException e) {
         System.out.println("Error al registrar manager: " + e.getMessage());
     } finally {
