@@ -1,3 +1,4 @@
+import java.sql.SQLException;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Locale;
@@ -9,8 +10,9 @@ public class Main {
     public static void main(String[] args) {
         //Conexion a la BD
         DBConnection db = new DBConnection();
-        db.abrirConexion();
+       /* db.abrirConexion();
         db.cerrarConexion();
+        */
     // Fin de conexion a la BD
 //prueba
                 ManagerDAO managerDAO = new ManagerDAO();
@@ -68,14 +70,23 @@ public class Main {
                             j.setFoto(sc.nextLine());
                             System.out.print("ID del equipo: ");
                             j.setEquipoID(sc.nextInt());
-                            jugadorDAO.registrarJugador(j);
+                            try {
+                                jugadorDAO.registrarJugador(j);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             System.out.println("Jugador registrado.");
                             break;
 
                         case 2:
                             System.out.print("ID del equipo: ");
                             int equipoID = sc.nextInt();
-                            List<Jugador> jugadores = jugadorDAO.listarJugadoresPorEquipo(equipoID);
+                            List<Jugador> jugadores = null;
+                            try {
+                                jugadores = jugadorDAO.listarJugadoresPorEquipo(equipoID);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             ConsolePrinter.imprimirJugadores(jugadores);
                             System.out.println("");
 
@@ -167,7 +178,12 @@ public class Main {
                             int idJugador = sc.nextInt();
                             sc.nextLine();
 
-                            Jugador jugadorExistente = jugadorDAO.obtenerJugadorPorID(idJugador);
+                            Jugador jugadorExistente = null;
+                            try {
+                                jugadorExistente = jugadorDAO.obtenerJugadorPorID(idJugador);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             if (jugadorExistente == null) {
                                 System.out.println("Jugador no encontrado.");
                                 break;
@@ -214,14 +230,23 @@ public class Main {
                             sc.nextLine();
                             if (nuevoEquipoID != 0) jugadorExistente.setEquipoID(nuevoEquipoID);
 
-                            jugadorDAO.actualizarJugador(jugadorExistente);
+                            try {
+                                jugadorDAO.actualizarJugador(jugadorExistente);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             System.out.println("Jugador actualizado.");
                             break;
 
                         case 10:
                             System.out.print("Nombre o apellido a buscar: ");
                             String termino = sc.nextLine();
-                            List<Jugador> resultados = jugadorDAO.buscarJugadoresPorNombre(termino);
+                            List<Jugador> resultados = null;
+                            try {
+                                resultados = jugadorDAO.buscarJugadoresPorNombre(termino);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             if (resultados.isEmpty()) {
                                 System.out.println("No se encontraron jugadores.");
                             } else {
@@ -236,7 +261,12 @@ public class Main {
                             int idEliminar = sc.nextInt();
                             sc.nextLine(); // limpiar buffer
 
-                            boolean eliminado = jugadorDAO.eliminarJugador(idEliminar);
+                            boolean eliminado = false;
+                            try {
+                                eliminado = jugadorDAO.eliminarJugador(idEliminar);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             if (eliminado) {
                                 System.out.println("Jugador eliminado correctamente.");
                             } else {
@@ -265,7 +295,11 @@ public class Main {
                             m.setTelefono(sc.nextLine());
                             System.out.print("ID del equipo: ");
                             m.setEquipoID(sc.nextInt());
-                            managerDAO.registrarManager(m);
+                            try {
+                                managerDAO.registrarManager(m);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             System.out.println("Manager registrado.");
                             break;
 
@@ -273,7 +307,12 @@ public class Main {
                             ManagerDAO manager = new ManagerDAO();
                             System.out.print("ID del equipo: ");
                             equipoID = sc.nextInt();
-                            List<Manager> managers = manager.listarManagerPorEquipo(equipoID);
+                            List<Manager> managers = null;
+                            try {
+                                managers = manager.listarManagerPorEquipo(equipoID);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             ConsolePrinter.imprimirManager(managers);
                             break;
 
@@ -282,7 +321,12 @@ public class Main {
                             int idmanager  = sc.nextInt();
                             sc.nextLine();
 
-                            Manager managerExistente = managerDAO.obtenerManagerPorID(idmanager);
+                            Manager managerExistente = null;
+                            try {
+                                managerExistente = managerDAO.obtenerManagerPorID(idmanager);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             if ( managerExistente == null) {
                                 System.out.println("Manager no encontrado.");
                                 break;
@@ -320,7 +364,11 @@ public class Main {
                             sc.nextLine();
                             if (nuevoEquipoIDM != 0) managerExistente.setEquipoID(nuevoEquipoIDM);
 
-                            managerDAO.actualizarManager(managerExistente);
+                            try {
+                                managerDAO.actualizarManager(managerExistente);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             System.out.println("Manager actualizado.");
                             break;
 
@@ -397,7 +445,12 @@ public class Main {
                                 int idEliminarM = sc.nextInt();
                                 sc.nextLine(); // limpiar buffer
 
-                                boolean eliminadoM = managerDAO.eliminarManager(idEliminarM);
+                                boolean eliminadoM = false;
+                                try {
+                                    eliminadoM = managerDAO.eliminarManager(idEliminarM);
+                                } catch (SQLException e) {
+                                    throw new RuntimeException(e);
+                                }
                                 if (eliminadoM) {
                                     System.out.println("Manager eliminado correctamente.");
                                 } else {

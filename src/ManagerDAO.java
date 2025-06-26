@@ -6,18 +6,14 @@ import java.sql.Date;
 
 public class ManagerDAO {
 
-    public void registrarManager(Manager manager) {
-        DBConnection db = new DBConnection();
-        db.abrirConexion();
-        Connection conn = db.getConnection();
+    private DBConnection dbConnection = new DBConnection();
 
-        if (conn == null) {
-            System.out.println("Conexión fallida. No se pudo registrar al manager.");
-            return;
-        }
+
+    public void registrarManager(Manager manager) throws SQLException {
     String sql = "INSERT INTO manager (NombreCompleto, FechaNacimiento,Correo,Telefono,EquipoID ) VALUES (?, ?, ?, ?, ?)";
 
-    try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+    try (Connection conn = dbConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
         stmt.setString(1, manager.getNombreCompleto());
         stmt.setDate(2, Date.valueOf(manager.getFechaNacimiento()));
@@ -32,26 +28,17 @@ public class ManagerDAO {
         }
 
     } catch (SQLException e) {
-        System.out.println("Error al registrar manager: " + e.getMessage());
-    } finally {
-        db.cerrarConexion();
+        throw e;
     }
 }
 
-    public List<Manager> listarManagerPorEquipo(int equipoID) {
+    public List<Manager> listarManagerPorEquipo(int equipoID) throws SQLException {
         List<Manager> manager = new ArrayList<>();
-        DBConnection db = new DBConnection();
-        db.abrirConexion();
-        Connection conn = db.getConnection();
-
-        if (conn == null) {
-            System.out.println("Conexión fallida. No se pudo listar Manager.");
-            return manager;
-        }
-
         String sql = "SELECT * FROM manager WHERE EquipoID = ?";
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try ( Connection conn = dbConnection.getConnection();
+              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, equipoID);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -67,15 +54,12 @@ public class ManagerDAO {
                 manager.add(m);
             }
         } catch (SQLException e) {
-            System.out.println("Error al listar manager: " + e.getMessage());
-        } finally {
-            db.cerrarConexion();
+            throw e;
         }
-
         return manager;
     }
 
-    public void actualizarManager(Manager manager) {
+    public void actualizarManager(Manager manager) throws SQLException {
         String sql = "UPDATE manager SET NombreCompleto = ?, FechaNacimiento = ?, Correo = ?, Telefono = ?, EquipoID = ? WHERE ID = ?";
         try (Connection conn = new DBConnection().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -89,11 +73,11 @@ public class ManagerDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Error al actualizar Manager: " + e.getMessage());
+            throw e;
         }
     }
 
-    public Manager obtenerManagerPorID(int id) {
+    public Manager obtenerManagerPorID(int id) throws SQLException {
         String sql = "SELECT * FROM manager WHERE ID = ?";
         try (Connection conn = new DBConnection().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -111,29 +95,29 @@ public class ManagerDAO {
                );
             }
         } catch (SQLException e) {
-            System.out.println("Error al obtener mamager: " + e.getMessage());
+            throw e;
         }
         return null;
     }
 
-    public boolean eliminarManager(int id) {
+    public boolean eliminarManager(int id) throws SQLException {
         String sql = "DELETE FROM manager WHERE id = ?";
         try (Connection conn = new DBConnection().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             int filasAfectadas = stmt.executeUpdate(); // Guarda el numero de filas afectadas
+            return filasAfectadas > 0;
 
 
-            if (filasAfectadas > 0) {   // Verifica si se eliminó al menos una fila
+           /* if (filasAfectadas > 0) {   // Verifica si se eliminó al menos una fila
                 return true; // Si sí, devuelve true
             } else {
                 return false; // Si no, devuelve false (por ejemplo, si el ID no existe)
-            }
+            }*/
 
         } catch (SQLException e) {
-            System.out.println("Error al eliminar categoría: " + e.getMessage());
-            return false; // Si ocurre un error de SQL, la operación falló
+            throw e;
         }
     }
     }

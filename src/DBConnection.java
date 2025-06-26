@@ -3,45 +3,36 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-    private Connection connection;
+
+    private static final String URL = "jdbc:mysql://localhost:3306/sportcore";
+    private static final String USER = "root";
+    private static final String PASSWORD = ""; // Cambia si tu MySQL tiene contraseña
 
 
-    public void abrirConexion() {
+    public Connection getConnection() throws SQLException {
         try {
-            String URL = "jdbc:mysql://localhost:3306/sportcore";
-            String USER = "root";
-            String PASSWORD = ""; // Cambia si tu MySQL tiene contraseña
-
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-
-            System.out.println("Conexion Exitosa");
-        } catch (Exception e) {
-            System.out.println("Error de conexion" + e.getMessage());
-        }
-    }
-
-    public Connection getConnection() {
-        try {
-            if (connection == null || connection.isClosed()) {
-                abrirConexion();
-            }
+            Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            return conn;
         } catch (SQLException e) {
-            System.out.println("Error verificando conexión: " + e.getMessage());
+            throw e;
+        } catch (ClassNotFoundException e) {
+            throw new SQLException("Error al cargar el controlador de MySQL", e);
         }
-        return connection;
     }
 
-    public void cerrarConexion() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                System.out.println("Conexion Cerrada");
+    public void cerrarConexion(Connection conn) {
+        if (conn != null) {
+            try {
+                if (!conn.isClosed()) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
             }
-        } catch (SQLException e) {
-            System.out.println("Error de conexion" + e.getMessage());
         }
     }
-
 }
+
+
+
 
