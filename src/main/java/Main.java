@@ -12,7 +12,7 @@ public class Main {
         db.abrirConexion();
         db.cerrarConexion();
     // Fin de conexion a la BD
-
+//prueba
                 ManagerDAO managerDAO = new ManagerDAO();
                 JugadorDAO jugadorDAO = new JugadorDAO();
                 EquipoDAO  equipoDAO   = new EquipoDAO();
