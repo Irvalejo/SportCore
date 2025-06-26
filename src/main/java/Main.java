@@ -128,7 +128,11 @@ public class Main {
                             categoria.setLigaID(ligaID);
 
 
-                            categoriaDAO.registrarCategoria(categoria);
+                            try {
+                                categoriaDAO.registrarCategoria(categoria);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             break;
 
 
@@ -159,7 +163,12 @@ public class Main {
                             sc.nextLine();
 
                             CategoriaDAO catDAO = new CategoriaDAO();
-                            List<Categoria> categoriasPorLiga = catDAO.listarCategoriasPorLiga(idLiga);
+                            List<Categoria> categoriasPorLiga = null;
+                            try {
+                                categoriasPorLiga = catDAO.listarCategoriasPorLiga(idLiga);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             ConsolePrinter.imprimirCategorias(categoriasPorLiga);
                             break;
 
@@ -462,7 +471,12 @@ public class Main {
                                 System.out.print("ID de la categoria a editar: ");
                                 int idCategoria = sc.nextInt();
                                 sc.nextLine();
-                                Categoria categoriaExistente = categoriaDAO.obtenerCategoriaPorId(idCategoria);
+                                Categoria categoriaExistente = null;
+                                try {
+                                    categoriaExistente = categoriaDAO.obtenerCategoriaPorId(idCategoria);
+                                } catch (SQLException e) {
+                                    throw new RuntimeException(e);
+                                }
                                 if (categoriaExistente == null) {
                                     System.out.println("Categoria no encontrada.");
                                     break;
@@ -479,7 +493,11 @@ public class Main {
                                 System.out.print("Nueva Restriccion Edad Maxima (0 para mantener): ");
                                 int nuevaRestriccionEdadMax = sc.nextInt();
                                 if (nuevaRestriccionEdadMax != 0) categoriaExistente.setRestriccionEdadMax(nuevaRestriccionEdadMax);
-                                categoriaDAO.actualizarCategoria(categoriaExistente);
+                                try {
+                                    categoriaDAO.actualizarCategoria(categoriaExistente);
+                                } catch (SQLException e) {
+                                    throw new RuntimeException(e);
+                                }
                                 System.out.println("Categoria actualizada.");
                                 break;
 
@@ -488,7 +506,12 @@ public class Main {
                                 int idEliminarC = sc.nextInt();
                                 sc.nextLine(); // limpiar buffer
 
-                                boolean eliminadoC = categoriaDAO.eliminarCategoria(idEliminarC);
+                                boolean eliminadoC = false;
+                                try {
+                                    eliminadoC = categoriaDAO.eliminarCategoria(idEliminarC);
+                                } catch (SQLException e) {
+                                    throw new RuntimeException(e);
+                                }
                                 if (eliminadoC) {
                                     System.out.println("Categoria eliminada correctamente.");
                                 } else {

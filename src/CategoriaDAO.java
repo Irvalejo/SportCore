@@ -3,11 +3,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoriaDAO {
+    private DBConnection dbConnection = new DBConnection();
 
-    public void registrarCategoria(Categoria categoria) {
+    public void registrarCategoria(Categoria categoria) throws SQLException {
         String sql = "INSERT INTO categoria (Nombre, RestriccionEdadMin, RestriccionEdadMax, LigaID) VALUES (?, ?, ?, ?)";
 
-        try (Connection conn = new DBConnection().getConnection();
+        try (Connection conn =  dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, categoria.getNombre());
@@ -29,15 +30,14 @@ public class CategoriaDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Error al registrar categoría: " + e.getMessage());
-        }
+            throw e;        }
     }
 
-    public List<Categoria> listarCategorias() {
+    public List<Categoria> listarCategorias() throws SQLException {
         List<Categoria> categorias = new ArrayList<>();
         String sql = "SELECT * FROM categoria";
 
-        try (Connection conn = new DBConnection().getConnection();
+        try (Connection conn =  dbConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -55,18 +55,18 @@ public class CategoriaDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("Error al listar categorías: " + e.getMessage());
+            throw e;
         }
 
         return categorias;
     }
 
 
-    public List<Categoria> listarCategoriasPorLiga(int ligaID) {
+    public List<Categoria> listarCategoriasPorLiga(int ligaID) throws SQLException {
         List<Categoria> categorias = new ArrayList<>();
         String sql = "SELECT * FROM categoria WHERE LigaID = ?";
 
-        try (Connection conn = new DBConnection().getConnection();
+        try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, ligaID);
@@ -87,16 +87,16 @@ public class CategoriaDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("Error al listar categorías por liga: " + e.getMessage());
+            throw e;
         }
 
         return categorias;
     }
 
-    public void actualizarCategoria(Categoria categoria) {
+    public void actualizarCategoria(Categoria categoria) throws SQLException {
         String sql = "UPDATE categoria SET Nombre = ?, RestriccionEdadMin = ?, RestriccionEdadMax = ? WHERE ID = ?";
 
-        try (Connection conn = new DBConnection().getConnection();
+        try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, categoria.getNombre());
@@ -107,37 +107,36 @@ public class CategoriaDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Error al actualizar categoría: " + e.getMessage());
+            throw e;
         }
     }
 
 
-    public boolean eliminarCategoria(int id) {              // Funcionaba pero no me dejaba eliminar por ID siempre( incluso si de vdd funcionaba ,
+    public boolean eliminarCategoria(int id) throws SQLException {              // Funcionaba pero no me dejaba eliminar por ID siempre( incluso si de vdd funcionaba ,
                                                            // por eso es diferente a los demas metodos eliminar, hay que hacerlos igual que ete
         String sql = "DELETE FROM categoria WHERE ID = ?";
-        try (Connection conn = new DBConnection().getConnection();
+        try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             int filasAfectadas = stmt.executeUpdate(); // Guarda el numero de filas afectadas
-
-
+            return filasAfectadas > 0;
+/*
             if (filasAfectadas > 0) {   // Verifica si se eliminó al menos una fila
                 return true; // Si sí, devuelve true
             } else {
                 return false; // Si no, devuelve false (por ejemplo, si el ID no existe)
             }
-
+*/
         } catch (SQLException e) {
-            System.out.println("Error al eliminar categoría: " + e.getMessage());
-            return false; // Si ocurre un error de SQL, la operación falló
+            throw e;
         }
     }
 
-    public Categoria obtenerCategoriaPorId(int id) {
+    public Categoria obtenerCategoriaPorId(int id)  throws SQLException {
         String sql = "SELECT * FROM categoria WHERE id = ?";
 
-        try (Connection conn = new DBConnection().getConnection();
+        try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
@@ -157,7 +156,7 @@ public class CategoriaDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("Error al obtener categoría: " + e.getMessage());
+            throw e;
         }
 
         return null;
