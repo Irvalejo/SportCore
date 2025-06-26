@@ -152,12 +152,21 @@ public class Main {
                             liga.setNombre(nombreLiga);
                             liga.setAño(añoLiga);
 
-                            ligaDAO.registrarLiga(liga);
+                            try {
+                                ligaDAO.registrarLiga(liga);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             break;
 
                         case 6:
                             LigaDAO daoLiga = new LigaDAO();
-                            List<Liga> ligas = daoLiga.listarLigas();
+                            List<Liga> ligas = null;
+                            try {
+                                ligas = daoLiga.listarLigas();
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             ConsolePrinter.imprimirLigas(ligas);
                             break;
 
@@ -440,7 +449,12 @@ public class Main {
                             System.out.print("ID de la liga a editar: ");
                             int idLigaM = sc.nextInt();
                             sc.nextLine();
-                            Liga ligaExistente = ligaDAO.obtenerLigaPorID(idLigaM);
+                            Liga ligaExistente = null;
+                            try {
+                                ligaExistente = ligaDAO.obtenerLigaPorID(idLigaM);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             if (ligaExistente == null) {
                                 System.out.println("Liga no encontrada.");
                                 break;
@@ -454,7 +468,11 @@ public class Main {
                             System.out.print("Nuevo anio (0 para mantener): ");
                             int nuevoAnio = sc.nextInt();
                             if (nuevoAnio != 0) ligaExistente.setAño(nuevoAnio);
-                            ligaDAO.actualizarLiga(ligaExistente);
+                            try {
+                                ligaDAO.actualizarLiga(ligaExistente);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             System.out.println("Liga actualizada.");
                             break;
 
@@ -463,7 +481,12 @@ public class Main {
                                 int idEliminarL = sc.nextInt();
                                 sc.nextLine(); // limpiar buffer
 
-                                boolean eliminadoL = ligaDAO.eliminarLiga(idEliminarL);
+                                boolean eliminadoL = false;
+                                try {
+                                    eliminadoL = ligaDAO.eliminarLiga(idEliminarL);
+                                } catch (SQLException e) {
+                                    throw new RuntimeException(e);
+                                }
                                 if (eliminadoL) {
                                     System.out.println("liga eliminada correctamente.");
                                 } else {
