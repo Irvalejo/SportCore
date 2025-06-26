@@ -104,7 +104,11 @@ public class Main {
                             equipo.setNombre(nombreEquipo);
                             equipo.setCategoriaID(categoriaID);
 
-                            equipoDAO.registrarEquipo(equipo);
+                            try {
+                                equipoDAO.registrarEquipo(equipo);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             break;
 
                         case 4:
@@ -178,7 +182,12 @@ public class Main {
                             sc.nextLine();
 
                             EquipoDAO eqDAO = new EquipoDAO();
-                            List<Equipo> equiposPorCat = eqDAO.listarEquiposPorCategoria(idCat);
+                            List<Equipo> equiposPorCat = null;
+                            try {
+                                equiposPorCat = eqDAO.listarEquiposPorCategoria(idCat);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             ConsolePrinter.imprimirEquipos(equiposPorCat);
                             break;
 
@@ -385,7 +394,12 @@ public class Main {
                             System.out.println("ID del equipo a editar: ");
                             int idequipo  = sc.nextInt();
                             sc.nextLine();
-                            Equipo equipoExistente = equipoDAO.obtenerEquipoPorID(idequipo);
+                            Equipo equipoExistente = null;
+                            try {
+                                equipoExistente = equipoDAO.obtenerEquipoPorID(idequipo);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             if ( equipoExistente == null) {
                                 System.out.println("Equipo no encontrado.");
                                 break;
@@ -395,7 +409,11 @@ public class Main {
                             String nuevoNombreE = sc.nextLine();
                             if (!nuevoNombreE.isEmpty()) equipoExistente.setNombre(nuevoNombreE);
 
-                            equipoDAO.actualizarEquipo(equipoExistente);
+                            try {
+                                equipoDAO.actualizarEquipo(equipoExistente);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             System.out.println("Equipo actualizado.");
                             break;
 
@@ -404,7 +422,12 @@ public class Main {
                             int idEliminarE = sc.nextInt();
                             sc.nextLine(); // limpiar buffer
 
-                            boolean eliminadoE = equipoDAO.eliminarEquipo(idEliminarE);
+                            boolean eliminadoE = false;
+                            try {
+                                eliminadoE = equipoDAO.eliminarEquipo(idEliminarE);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             if (eliminadoE) {
                                 System.out.println("Equipo eliminado correctamente.");
                             } else {
