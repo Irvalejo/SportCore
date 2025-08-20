@@ -1,0 +1,66 @@
+@@startuml
+ skinparam classAttributeIconSize 0
+
+ class Liga {
+   - int id
+   - String nombre
+   - int año
+ }
+
+ class Categoria {
+   - int id
+   - String nombre
+   - Integer restriccionEdadMin
+   - Integer restriccionEdadMax
+   - int ligaId
+ }
+
+ class Equipo {
+   - int id
+   - String nombre
+   - int categoriaId
+ }
+
+ class Jugador {
+   - int id
+   - String nombre
+   - String apellido
+   - LocalDate fechaNacimiento
+   - String correo
+   - String foto
+   - int equipoId
+ }
+
+ class Manager {
+   - int id
+   - String nombreCompleto
+   - LocalDate fechaNacimiento
+   - String correo
+   - String telefono
+   - int equipoId
+ }
+
+ class Partido {
+   - int id
+   - LocalDate fecha
+   - int equipoLocalId
+   - int equipoVisitanteId
+   - int categoriaId
+ }
+
+ class Credencial {
+   - int id
+   - int jugadorId
+   - String qr
+   - LocalDate fechaEmision
+ }
+
+ Liga "1" -- "many" Categoria : contiene
+ Categoria "1" -- "many" Equipo : contiene
+ Equipo "1" -- "many" Jugador : tiene
+ Equipo "1" -- "many" Manager : gestiona
+ Categoria "1" -- "many" Partido : juega en
+ Equipo "1" -- "many" Partido : local
+ Equipo "1" -- "many" Partido : visitante
+ Jugador "1" -- "many" Credencial : posee
+ @enduml

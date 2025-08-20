@@ -1,70 +1,97 @@
 @startuml
-
-class DBConnection {
-    - connection: Connection
-    + abrirConexion(): void
-    + getConnection(): Connection
-    + cerrarConexion(): void
-}
-
-class Liga {
-    - id: int
-    - nombre: String
-    + getters/setters
-}
-
-class Categoria {
-    - id: int
-    - nombre: String
-    - restriccionEdadMin: Integer
-    - restriccionEdadMax: Integer
-    - ligaID: int
-    + getters/setters
-}
-
-class CategoriaDAO {
-    + registrarCategoria(c: Categoria): void
-    + listarCategorias(): List<Categoria>
-    + listarCategoriasPorLiga(idLiga: int): List<Categoria>
+' Clases modelo
+class Jugador {
+  - int id
+  - String nombre
+  - String apellido
+  - String fechaNacimiento
+  - String correo
+  - String foto
+  - int equipoID
+  + getters/setters
 }
 
 class Equipo {
-    - id: int
-    - nombre: String
-    - categoriaID: int
-    + getters/setters
+  - int id
+  - String nombre
+  - int categoriaID
+  + getters/setters
+}
+
+class Categoria {
+  - int id
+  - String nombre
+  - int restriccionEdadMin
+  - int restriccionEdadMax
+  - int ligaID
+  + getters/setters
+}
+
+class Liga {
+  - int id
+  - String nombre
+  - int año
+  + getters/setters
+}
+
+' Clases DAO
+class JugadorDAO {
+  + registrarJugador(j: Jugador): void
+  + listarJugadoresPorEquipo(equipoID: int): List<Jugador>
+  + obtenerJugadorPorID(id: int): Jugador
+  + actualizarJugador(j: Jugador): void
+  + eliminarJugador(id: int): boolean
+  + buscarJugadoresPorNombre(nombre: String): List<Jugador>
 }
 
 class EquipoDAO {
-    + registrarEquipo(e: Equipo): void
-    + listarEquiposPorCategoria(idCategoria: int): List<Equipo>
+  + registrarEquipo(e: Equipo): void
+  + listarEquiposPorCategoria(categoriaID: int): List<Equipo>
 }
 
-class Jugador {
-    - id: int
-    - nombre: String
-    - apellido: String
-    - fechaNacimiento: String
-    - correo: String
-    - foto: String
-    - equipoID: int
-    + getters/setters
+class CategoriaDAO {
+  + registrarCategoria(c: Categoria): void
+  + listarCategoriasPorLiga(ligaID: int): List<Categoria>
+}
+
+class LigaDAO {
+  + registrarLiga(l: Liga): void
+  + listarLigas(): List<Liga>
+}
+
+' Clase principal
+class Main {
+  + main(args: String[]): void
 }
 
 class ConsolePrinter {
-    + imprimirLigas(ligas: List<Liga>): void
-    + imprimirCategorias(categorias: List<Categoria>): void
-    + imprimirEquipos(equipos: List<Equipo>): void
-    + imprimirJugadores(jugadores: List<Jugador>): void
+  + imprimirJugador(j: Jugador): void
+  + imprimirJugadores(lista: List<Jugador>): void
+  + imprimirEquipos(lista: List<Equipo>): void
+  + imprimirCategorias(lista: List<Categoria>): void
+  + imprimirLigas(lista: List<Liga>): void
 }
 
 class estadisticas {
 
 }
 ' Relaciones
-Liga "1" --> "*" Categoria : contiene >
-Categoria "1" --> "*" Equipo : contiene >
-Equipo "1" --> "*" Jugador : contiene >
+Jugador "1" --> "1" Equipo : equipoID
+Equipo "1" --> "1" Categoria : categoriaID
+Categoria "1" --> "1" Liga : ligaID
+
+Main --> JugadorDAO
+Main --> EquipoDAO
+Main --> CategoriaDAO
+Main --> LigaDAO
+Main --> ConsolePrinter
+
+JugadorDAO --> Jugador
+EquipoDAO --> Equipo
+CategoriaDAO --> Categoria
+LigaDAO --> Liga
 Jugador "1" --> "1" Equipo : pertenece >
 
 @enduml
+
+

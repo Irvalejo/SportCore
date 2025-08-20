@@ -19,6 +19,7 @@ public class Main {
                 JugadorDAO jugadorDAO = new JugadorDAO();
                 EquipoDAO  equipoDAO   = new EquipoDAO();
                 LigaDAO ligaDAO = new LigaDAO();
+                ArbitroDAO arbDAO = new ArbitroDAO();
                 CategoriaDAO categoriaDAO = new CategoriaDAO();
                 Scanner sc = new Scanner(System.in);
 
@@ -44,6 +45,11 @@ public class Main {
                     System.out.println("19. Eliminar Manager");
                     System.out.println("20. Editar Categoria");
                     System.out.println("21. Eliminar Categoria");
+                    System.out.println("22. Registrar árbitro");
+                    System.out.println("23. Listar árbitros");
+                    System.out.println("24. Buscar árbitro por ID");
+                    System.out.println("25. Actualizar árbitro");
+                    System.out.println("26. Eliminar árbitro");
                     System.out.println("0. Salir");
                     int opcion = sc.nextInt();
                     sc.nextLine(); // limpiar buffer
@@ -564,6 +570,109 @@ public class Main {
                                     System.out.println("No se pudo eliminar la categoria. Verifica el ID.");
                                 }
                                 break;
+
+                        case 22: // Registrar árbitro
+                            System.out.println("=== Registrar Árbitro ===");
+                            System.out.print("Nombre: ");
+                            String nombreA = sc.nextLine();
+                            System.out.print("Apellido paterno: ");
+                            String apPatA = sc.nextLine();
+                            System.out.print("Apellido materno: ");
+                            String apMatA = sc.nextLine();
+                            System.out.print("Fecha nacimiento (YYYY-MM-DD): ");
+                            LocalDate fnA = LocalDate.parse(sc.nextLine());
+                            System.out.print("Correo: ");
+                            String correoA = sc.nextLine();
+                            System.out.print("Teléfono: ");
+                            String telA = sc.nextLine();
+
+                            Arbitro nuevoArbitro = new Arbitro(nombreA, apPatA, apMatA, fnA, correoA, telA);
+                            ArbitroDAO arbitroDAO = new ArbitroDAO();
+                            try {
+                                arbitroDAO.registrarArbitro(nuevoArbitro);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                            System.out.println("Árbitro registrado con ID: " + nuevoArbitro.getId());
+                            break;
+
+                        case 23: // Listar árbitros
+                            System.out.println("=== Lista de Árbitros ===");
+                            try {
+                                for (Arbitro a : new ArbitroDAO().listarArbitros()) {
+                                    System.out.println(a.getId() + " - " + a.getNombre() + " " + a.getApellidoPaterno() + " " + a.getApellidoMaterno());
+                                }
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                            break;
+
+                        case 24: // Obtener árbitro por ID
+                            System.out.print("Ingrese ID del árbitro: ");
+                            int idArbitro = sc.nextInt(); sc.nextLine();
+                            Arbitro buscado = null;
+                            try {
+                                buscado = new ArbitroDAO().obtenerArbitroPorId(idArbitro);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                            if (buscado != null) {
+                                System.out.println(buscado.getId() + " - " + buscado.getNombre() + " " + buscado.getApellidoPaterno() +
+                                        " " + buscado.getApellidoMaterno() + ", correo: " + buscado.getCorreo() + ", tel: " + buscado.getTelefono());
+                            } else {
+                                System.out.println("No se encontró el árbitro con ID " + idArbitro);
+                            }
+                            break;
+
+                        case 25: // Actualizar árbitro
+                            System.out.print("ID del árbitro a actualizar: ");
+                            int idUp = sc.nextInt(); sc.nextLine();
+
+                            Arbitro arbExist = null;
+                            try {
+                                arbExist = arbDAO.obtenerArbitroPorId(idUp);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                            if (arbExist != null) {
+                                System.out.println("Nuevo nombre (actual: " + arbExist.getNombre() + "): ");
+                                arbExist.setNombre(sc.nextLine());
+                                System.out.println("Nuevo apellido paterno (actual: " + arbExist.getApellidoPaterno() + "): ");
+                                arbExist.setApellidoPaterno(sc.nextLine());
+                                System.out.println("Nuevo apellido materno (actual: " + arbExist.getApellidoMaterno() + "): ");
+                                arbExist.setApellidoMaterno(sc.nextLine());
+                                System.out.println("Nueva fecha nacimiento (YYYY-MM-DD, actual: " + arbExist.getFechaNacimiento() + "): ");
+                                arbExist.setFechaNacimiento(LocalDate.parse(sc.nextLine()));
+                                System.out.println("Nuevo correo (actual: " + arbExist.getCorreo() + "): ");
+                                arbExist.setCorreo(sc.nextLine());
+                                System.out.println("Nuevo teléfono (actual: " + arbExist.getTelefono() + "): ");
+                                arbExist.setTelefono(sc.nextLine());
+
+                                try {
+                                    arbDAO.actualizarArbitro(arbExist);
+                                } catch (SQLException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                System.out.println("Árbitro actualizado correctamente.");
+                            } else {
+                                System.out.println("No existe árbitro con ese ID.");
+                            }
+                            break;
+
+                        case 26: // Eliminar árbitro
+                            System.out.print("ID del árbitro a eliminar: ");
+                            int idDel = sc.nextInt(); sc.nextLine();
+                            try {
+                                if (new ArbitroDAO().eliminarArbitro(idDel)) {
+                                    System.out.println("Árbitro eliminado con éxito.");
+                                } else {
+                                    System.out.println("No se encontró árbitro con ese ID.");
+                                }
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                            break;
 
                         case 0:
                             System.out.println("Saliendo...");
